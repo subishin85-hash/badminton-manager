@@ -1,0 +1,743 @@
+body{
+    margin:0;
+    height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:#f5f5f5;
+
+    font-family:
+    "Apple SD Gothic Neo",
+    sans-serif;
+}
+
+.container{
+    text-align:center;
+}
+
+h1{
+    margin-bottom:40px;
+}
+
+#registerBtn{
+    width:250px;
+    height:80px;
+
+    font-size:28px;
+    font-weight:bold;
+
+    border:none;
+    border-radius:15px;
+
+    background:#2e7d32;
+    color:white;
+
+    cursor:pointer;
+}
+
+/* 선수 등록 페이지 */
+.register-container{
+    width:92%;
+    max-width:1000px;
+    text-align:center;
+}
+
+.register-box{
+    background:white;
+    border-radius:24px;
+    padding:40px;
+    margin-bottom:35px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.08);
+}
+
+.sub-btn{
+    min-width:220px;
+    height:70px;
+    font-size:24px;
+    font-weight:bold;
+    border:none;
+    border-radius:16px;
+    background:#1976d2;
+    color:white;
+    cursor:pointer;
+}
+
+#memberNameInput,
+#guestNameInput{
+    width:360px;
+    height:68px;
+    font-size:24px;
+    padding:0 20px;
+    border:1px solid #ccc;
+    border-radius:16px;
+    box-sizing:border-box;
+}
+
+#completeBtn{
+    width:520px;
+    height:80px;
+    font-size:26px;
+    font-weight:bold;
+    border:none;
+    border-radius:18px;
+    background:#2e7d32;
+    color:white;
+    cursor:pointer;
+}
+
+.register-container h1{
+    font-size:44px;
+    margin-bottom:35px;
+}
+
+.register-container h2{
+    font-size:32px;
+    margin-bottom:25px;
+}
+
+button,
+input{
+    touch-action:manipulation;
+}
+
+button{
+    -webkit-tap-highlight-color:transparent;
+}
+
+.button-row,
+.guest-row{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+#memberList,
+#guestList{
+    margin-top:25px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    justify-content:center;
+}
+
+.search-input{
+    width:420px;
+    height:60px;
+    margin:15px auto 10px auto;
+    display:block;
+    padding:0 18px;
+    border:2px solid #d0d0d0;
+    border-radius:14px;
+    font-size:22px;
+    box-sizing:border-box;
+}
+
+.search-input:focus{
+    outline:none;
+    border-color:#1976d2;
+}
+
+.player-btn{
+    min-width:130px;
+    height:58px;
+    border:none;
+    border-radius:14px;
+    background:#e0e0e0;
+    font-size:20px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.player-btn.selected{
+    background:#2e7d32;
+    color:white;
+}
+
+@media (max-width: 1024px){
+    .register-container{
+        width:92%;
+        max-width:760px;
+    }
+
+    .register-box{
+        padding:28px;
+    }
+
+    h1{
+        font-size:36px;
+    }
+
+    h2{
+        font-size:26px;
+    }
+
+    .sub-btn{
+        min-width:190px;
+        height:60px;
+        font-size:21px;
+    }
+
+    #memberNameInput,
+    #guestNameInput{
+        width:300px;
+        height:58px;
+        font-size:21px;
+    }
+
+    #completeBtn{
+        width:420px;
+        height:70px;
+        font-size:22px;
+    }
+}
+
+@media (max-width: 600px){
+    body{
+        align-items:flex-start;
+        height:auto;
+        min-height:100vh;
+        padding:30px 0;
+    }
+
+    .register-container{
+        width:92%;
+    }
+
+    h1{
+        font-size:30px;
+        margin-bottom:25px;
+    }
+
+    h2{
+        font-size:22px;
+    }
+
+    .register-box{
+        padding:22px;
+        margin-bottom:22px;
+    }
+
+    .button-row,
+    .guest-row{
+        flex-direction:column;
+        align-items:center;
+    }
+
+    .sub-btn,
+    #memberNameInput,
+    #guestNameInput,
+    #completeBtn{
+        width:100%;
+        max-width:340px;
+    }
+
+    .sub-btn{
+        height:58px;
+        font-size:20px;
+    }
+
+    #memberNameInput,
+    #guestNameInput{
+        height:56px;
+        font-size:20px;
+        box-sizing:border-box;
+    }
+
+    #completeBtn{
+        height:66px;
+        font-size:20px;
+    }
+}
+
+/* =========================
+   코트 화면 - 이미지형 보드 UI
+========================= */
+.court-body{
+    margin:0;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    background:#ffffff;
+    font-family:"Apple SD Gothic Neo", sans-serif;
+}
+
+.court-layout{
+    width:100vw;
+    height:100vh;
+    display:grid;
+    grid-template-columns:82% 16%;
+    grid-template-rows:10% 43% 43%;
+    gap:1.5%;
+    padding:0.7%;
+    box-sizing:border-box;
+    background:#ffffff;
+}
+
+.court-title-bar{
+    grid-column:1 / 3;
+    grid-row:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+}
+
+.court-title-bar h1{
+    margin:0;
+    width:99%;
+    height:90%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#1f5599;
+    color:white;
+    border-radius:12px;
+    font-size:88px;
+    font-weight:900;
+    letter-spacing:3px;
+}
+
+.court-main-area{
+    grid-column:1;
+    grid-row:2 / 4;
+    display:grid;
+    grid-template-rows:1fr 1fr;
+    gap:5%;
+}
+
+.game-board{
+    position:relative;
+    border-radius:36px;
+    border:8px solid #075487;
+    background:#91d0df;
+    padding:55px 35px 25px 35px;
+    box-sizing:border-box;
+}
+
+.waiting-game-board{
+    border-color:#009b83;
+    background:#20d8c2;
+}
+
+.section-label{
+    position:absolute;
+    top:-36px;
+    left:50%;
+    transform:translateX(-50%);
+    padding:12px 42px;
+    border-radius:12px;
+    color:white;
+    font-size:68px;
+    font-weight:900;
+    border:3px solid rgba(0,0,0,0.2);
+}
+
+.playing-label{
+    background:#0780bf;
+}
+
+.waiting-game-label{
+    background:#04a88f;
+}
+
+.court-list{
+    height:100%;
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:20px;
+}
+
+.badminton-court{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.court-name{
+    background:white;
+    color:#111;
+    border-radius:14px;
+    padding:10px 24px;
+    margin-bottom:18px;
+    font-size:50px;
+    font-weight:900;
+}
+
+.court-field{
+    width:100%;
+    flex:1;
+    background:#075992;
+    position:relative;
+    min-height:360px;
+    display:grid;
+    grid-template-rows:1fr 1fr;
+    overflow:hidden;
+}
+
+.next-court .court-field{
+    background:#087769;
+}
+
+.right-area{
+    grid-column:2;
+    grid-row:2 / 4;
+    display:grid;
+    grid-template-rows:1fr 1fr;
+    gap:4%;
+    min-height:0;
+}
+
+.side-box{
+    position:relative;
+    border-radius:34px;
+    padding:55px 12px 12px 12px;
+    box-sizing:border-box;
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+}
+
+.rest-box{
+    background:#ffdd2d;
+    border:8px solid #f57c00;
+}
+
+.waiting-box{
+    background:#ff8f8b;
+    border:8px solid #e51c12;
+}
+
+.side-label{
+    position:absolute;
+    top:-32px;
+    left:50%;
+    transform:translateX(-50%);
+    min-width:110px;
+    text-align:center;
+    padding:12px 24px;
+    border-radius:10px;
+    color:white;
+    font-size:62px;
+    font-weight:900;
+}
+
+.rest-label{
+    background:#ffa000;
+    border:3px solid #f57c00;
+}
+
+.waiting-label{
+    background:#ff5a4d;
+    border:3px solid #e51c12;
+}
+
+.side-content{
+    width:100%;
+    flex:1;
+    min-height:0;
+    border-radius:18px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:4px;
+    align-content:start;
+    overflow-y:auto;
+    overflow-x:hidden;
+    scrollbar-width:auto;
+}
+
+@media (max-width:1100px){
+    .court-title-bar h1{
+        font-size:52px;
+    }
+
+    .section-label{
+        font-size:40px;
+    }
+
+    .side-label{
+        font-size:36px;
+        min-width:110px;
+    }
+
+    .court-list{
+        gap:14px;
+    }
+}
+
+.court-player-btn{
+    width:100%;
+    min-height:42px;
+    margin-bottom:2px;
+    border:none;
+    border-radius:10px;
+    background:white;
+    color:#222;
+    font-size:24px;
+    font-weight:900;
+    cursor:pointer;
+    box-shadow:0 3px 8px rgba(0,0,0,0.25);
+}
+
+.court-player-btn.selected-player{
+    background:#2e7d32;
+    color:white;
+    outline:4px solid #ffeb3b;
+}
+
+.assigned-player-btn{
+    width:98%;
+    min-height:52px;
+    margin:6px auto;
+    display:block;
+    background:#ffffff;
+    font-size:28px;
+}
+
+.assignable-area{
+    cursor:pointer;
+    padding:8px;
+    box-sizing:border-box;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:6px;
+    min-height:0;
+}
+
+.court-team-area:first-child{
+    border-bottom:4px solid white;
+}
+
+.court-team-area{
+    min-height:0;
+}
+
+.finish-game-btn{
+    width:100%;
+    height:52px;
+    margin-top:8px;
+    border:none;
+    border-radius:12px;
+    background:#d32f2f;
+    color:white;
+    font-size:22px;
+    font-weight:900;
+    cursor:pointer;
+}
+
+.finish-game-btn:hover{
+    background:#b71c1c;
+}
+
+.vs-label{
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%, -50%);
+    color:white;
+    font-size:32px;
+    font-weight:900;
+    background:rgba(0,0,0,0.35);
+    padding:4px 14px;
+    border-radius:20px;
+    pointer-events:none;
+    z-index:10;
+}
+
+.placeholder-btn{
+    width:92%;
+    height:68px;
+    margin:10px auto 12px auto;
+    display:block;
+    border:none;
+    border-radius:12px;
+    background:#1565c0;
+    color:white;
+    font-size:32px;
+    font-weight:900;
+    cursor:pointer;
+}
+
+.placeholder-btn:hover{
+    background:#0d47a1;
+}
+
+.reset-workout-btn{
+    position:absolute;
+    right:20px;
+    top:50%;
+    transform:translateY(-50%);
+    height:64px;
+    padding:0 24px;
+    border:none;
+    border-radius:12px;
+    background:#ff9800;
+    color:white;
+    font-size:28px;
+    font-weight:900;
+    cursor:pointer;
+    z-index:20;
+}
+
+.reset-workout-btn:hover{
+    background:#f57c00;
+}
+
+.edit-players-btn{
+    position:absolute;
+    left:20px;
+    top:50%;
+    transform:translateY(-50%);
+    height:64px;
+    padding:0 24px;
+    border:none;
+    border-radius:12px;
+    background:#2e7d32;
+    color:white;
+    font-size:28px;
+    font-weight:900;
+    cursor:pointer;
+    z-index:20;
+}
+
+.edit-players-btn:hover{
+    background:#1b5e20;
+}
+
+.icon-call-btn{
+    width:48px;
+    height:48px;
+    margin-left:10px;
+    border:none;
+    border-radius:50%;
+    background:#1976d2;
+    color:white;
+    font-size:26px;
+    font-weight:900;
+    cursor:pointer;
+    vertical-align:middle;
+    box-shadow:0 2px 6px rgba(0,0,0,0.25);
+}
+
+.icon-call-btn:hover{
+    background:#0d47a1;
+}
+
+.clear-next-games-btn{
+    position:absolute;
+    right:25px;
+    top:18px;
+    height:56px;
+    padding:0 20px;
+    border:none;
+    border-radius:12px;
+    background:#ff9800;
+    color:white;
+    font-size:24px;
+    font-weight:900;
+    cursor:pointer;
+    z-index:20;
+}
+
+.clear-next-games-btn:hover{
+    background:#f57c00;
+}
+
+.low-game-player{
+    background:#fff8e1;
+    color:#3e2723;
+    outline:3px solid #ffca28;
+    box-shadow:0 2px 8px rgba(0,0,0,0.22);
+}
+
+.show-stats-btn{
+    position:absolute;
+    right:230px;
+    top:50%;
+    transform:translateY(-50%);
+    height:64px;
+    padding:0 24px;
+    border:none;
+    border-radius:12px;
+    background:#6a1b9a;
+    color:white;
+    font-size:28px;
+    font-weight:900;
+    cursor:pointer;
+    z-index:20;
+}
+
+.show-stats-btn:hover{
+    background:#4a148c;
+}
+
+.undo-btn{
+    position:absolute;
+    right:390px;
+    top:50%;
+    transform:translateY(-50%);
+    height:64px;
+    padding:0 24px;
+    border:none;
+    border-radius:12px;
+    background:#455a64;
+    color:white;
+    font-size:28px;
+    font-weight:900;
+    cursor:pointer;
+    z-index:20;
+}
+
+.undo-btn:hover{
+    background:#263238;
+}
+.redo-btn{
+    position:absolute;
+    right:550px;
+    top:50%;
+    transform:translateY(-50%);
+    height:64px;
+    padding:0 24px;
+    border:none;
+    border-radius:12px;
+    background:#607d8b;
+    color:white;
+    font-size:28px;
+    font-weight:900;
+    cursor:pointer;
+    z-index:20;
+}
+
+.redo-btn:hover{
+    background:#455a64;
+}
+
+.selected-count-box{
+    position:absolute;
+    left:260px;
+    top:50%;
+    transform:translateY(-50%);
+
+    height:64px;
+    padding:0 22px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:12px;
+
+    background:#fff8e1;
+    border:3px solid #ffca28;
+
+    color:#5d4037;
+    font-size:28px;
+    font-weight:900;
+
+    z-index:20;
+}

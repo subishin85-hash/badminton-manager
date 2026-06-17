@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>코트 관리</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="court-body">
+
+<div class="court-layout">
+
+    <header class="court-title-bar">
+        <h1>강호 클럽 정기 운동</h1>
+            <div id="selectedCountBox" class="selected-count-box">
+        선택된 선수 : 0명
+    </div>
+        <button id="editPlayersBtn" class="edit-players-btn" type="button">선수 추가/수정</button>
+        <button id="showStatsBtn" class="show-stats-btn" type="button">통계</button>
+        <button id="undoBtn" class="undo-btn" type="button">↩ 되돌리기</button>
+        <button id="redoBtn" class="redo-btn" type="button">↪ 다시하기</button>
+        <button id="resetWorkoutBtn" class="reset-workout-btn" type="button">새 운동 시작</button>
+    </header>
+
+    <main class="court-main-area">
+
+        <section class="game-board playing-board">
+            <div class="section-label playing-label">게임 진행 중</div>
+
+            <div class="court-list">
+                <div class="badminton-court">
+                    <div class="court-name">COURT 1 <button class="call-court-btn icon-call-btn" data-court="1" type="button">🔊</button></div>
+                    <div class="court-field">
+                        <div id="currentCourt1A" class="assignable-area court-team-area"></div>
+                        <div class="vs-label">VS</div>
+                        <div id="currentCourt1B" class="assignable-area court-team-area"></div>
+                    </div>
+                    <button class="finish-game-btn" data-court="1">경기 종료</button>
+                </div>
+
+                <div class="badminton-court">
+                    <div class="court-name">COURT 2 <button class="call-court-btn icon-call-btn" data-court="2" type="button">🔊</button></div>
+                    <div class="court-field">
+                        <div id="currentCourt2A" class="assignable-area court-team-area"></div>
+                        <div class="vs-label">VS</div>
+                        <div id="currentCourt2B" class="assignable-area court-team-area"></div>
+                    </div>
+                    <button class="finish-game-btn" data-court="2">경기 종료</button>
+                </div>
+
+                <div class="badminton-court">
+                    <div class="court-name">COURT 3 <button class="call-court-btn icon-call-btn" data-court="3" type="button">🔊</button></div>
+                    <div class="court-field">
+                        <div id="currentCourt3A" class="assignable-area court-team-area"></div>
+                        <div class="vs-label">VS</div>
+                        <div id="currentCourt3B" class="assignable-area court-team-area"></div>
+                    </div>
+                    <button class="finish-game-btn" data-court="3">경기 종료</button>
+                </div>
+
+                <div class="badminton-court">
+                    <div class="court-name">COURT 4 <button class="call-court-btn icon-call-btn" data-court="4" type="button">🔊</button></div>
+                    <div class="court-field">
+                        <div id="currentCourt4A" class="assignable-area court-team-area"></div>
+                        <div class="vs-label">VS</div>
+                        <div id="currentCourt4B" class="assignable-area court-team-area"></div>
+                    </div>
+                    <button class="finish-game-btn" data-court="4">경기 종료</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="game-board waiting-game-board">
+            <div class="section-label waiting-game-label">게임 대기 중</div>
+            <button id="clearNextGamesBtn" class="clear-next-games-btn" type="button">다음 경기 초기화</button>
+
+            <div class="court-list">
+                <div class="badminton-court next-court">
+                    <div class="court-name">COURT 1</div>
+                    <div class="court-field">
+                        <div id="nextCourt1A" class="assignable-area court-team-area"></div>
+                        <div class="vs-label">VS</div>
+                        <div id="nextCourt1B" class="assignable-area court-team-area"></div>
+                    </div>
+                </div>
+
+                <div class="badminton-court next-court">
+                    <div class="court-name">COURT 2</div>
+                    <div class="court-field">
+                        <div id="nextCourt2A" class="assignable-area court-team-area"></div>
+                        <div class="vs-label">VS</div>
+                        <div id="nextCourt2B" class="assignable-area court-team-area"></div>
+                    </div>
+                </div>
+
+                <div class="badminton-court next-court">
+                    <div class="court-name">COURT 3</div>
+                    <div class="court-field">
+                        <div id="nextCourt3A" class="assignable-area court-team-area"></div>
+                        <div class="vs-label">VS</div>
+                        <div id="nextCourt3B" class="assignable-area court-team-area"></div>
+                    </div>
+                </div>
+
+                <div class="badminton-court next-court">
+                    <div class="court-name">COURT 4</div>
+                    <div class="court-field">
+                        <div id="nextCourt4A" class="assignable-area court-team-area"></div>
+                        <div class="vs-label">VS</div>
+                        <div id="nextCourt4B" class="assignable-area court-team-area"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <aside class="right-area">
+        <section class="side-box rest-box">
+            <div class="side-label rest-label">휴 식</div>
+            <div id="restPlayers" class="side-content"></div>
+        </section>
+
+        <section class="side-box waiting-box">
+            <div class="side-label waiting-label">대 기</div>
+            <button id="createPlaceholderBtn" class="placeholder-btn" type="button">경기중 복사</button>
+            <div id="waitingPlayers" class="side-content"></div>
+        </section>
+    </aside>
+
+</div>
+
+<script src="court.js"></script>
+</body>
+</html>

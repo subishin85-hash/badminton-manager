@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>선수 등록</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+
+<div class="register-container">
+
+    <h1>선수 등록</h1>
+
+    <section class="register-box">
+        <h2>강호클럽 회원 등록</h2>
+        <div style="margin-bottom:20px;">
+            <input id="excelFileInput" type="file" accept=".xlsx,.xls" style="display:none;">
+            <button id="excelImportBtn" class="sub-btn" type="button">엑셀 불러오기</button>
+        </div>
+        <div class="button-row">
+            <input id="memberNameInput" type="text" placeholder="회원 이름 입력">
+            <button id="addMemberBtn" class="sub-btn" type="button">회원 추가</button>
+        </div>
+        <div class="list-header-row">
+            <h3 class="list-title">회원 목록</h3>
+            <div>
+                <button id="selectAllBtn" class="delete-selected-btn" type="button">전체 선택</button>
+                <button id="clearAllBtn" class="delete-selected-btn" type="button">전체 해제</button>
+                <button id="deleteSelectedMembersBtn" class="delete-selected-btn" type="button">선택 삭제</button>
+            </div>
+        </div>
+        <input id="memberSearchInput" class="search-input" type="text" placeholder="회원 이름 검색">
+        <div id="memberList" class="player-list"></div>
+    </section>
+
+    <section class="register-box">
+        <h2>게스트 등록</h2>
+        <div class="guest-row">
+            <input id="guestNameInput" type="text" placeholder="게스트 이름 입력">
+            <button id="addGuestBtn" class="sub-btn" type="button">게스트 추가</button>
+        </div>
+        <div class="list-header-row">
+            <h3 class="list-title">게스트 목록</h3>
+            <button id="deleteSelectedGuestsBtn" class="delete-selected-btn" type="button">선택 삭제</button>
+        </div>
+        <div id="guestList" class="player-list"></div>
+    </section>
+
+    <button id="completeBtn" type="button">등록 완료 후 코트 화면으로 이동</button>
+
+</div>
+
+<script src="register.js"></script>
+</body>
+</html>
