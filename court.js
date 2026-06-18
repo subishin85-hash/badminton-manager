@@ -3,6 +3,7 @@ const restPlayers = document.getElementById('restPlayers');
 const assignableAreas = document.querySelectorAll('.assignable-area');
 const finishButtons = document.querySelectorAll('.finish-game-btn');
 const callCourtButtons = document.querySelectorAll('.call-court-btn');
+const courtActiveButtons = document.querySelectorAll('.court-active-btn');
 const waitingBox = document.querySelector('.waiting-box');
 const restBox = document.querySelector('.rest-box');
 const restLabel = document.querySelector('.rest-label');
@@ -16,9 +17,28 @@ const redoBtn = document.getElementById('redoBtn');
 const selectedCountBox = document.getElementById('selectedCountBox');
 
 const COURT_STATE_KEY = 'ganghoCourtState';
+const COURT_ACTIVE_KEY = 'ganghoActiveCourts';
 const savedPlayers = localStorage.getItem('selectedPlayers');
 let players = savedPlayers ? JSON.parse(savedPlayers) : [];
+let activeCourts = JSON.parse(localStorage.getItem(COURT_ACTIVE_KEY)) || {
+    1: true,
+    2: true,
+    3: true,
+    4: true
+};
 
+function saveActiveCourts() {
+    localStorage.setItem(COURT_ACTIVE_KEY, JSON.stringify(activeCourts));
+}
+
+function isCourtActive(courtNo) {
+    return activeCourts[courtNo] !== false;
+}
+
+function getCourtNoFromAreaId(areaId) {
+    const match = areaId.match(/Court(\d+)/);
+    return match ? match[1] : null;
+}
 function saveCourtState() {
     localStorage.setItem(COURT_STATE_KEY, JSON.stringify(players));
 }
@@ -99,6 +119,7 @@ const MAX_UNDO_HISTORY = 20;
 function getCurrentState() {
     return {
         players: JSON.parse(JSON.stringify(players)),
+        activeCourts: JSON.parse(JSON.stringify(activeCourts)),
         assignmentCounter
     };
 }
@@ -136,6 +157,7 @@ function restoreUndoState() {
     const previousState = undoHistory.pop();
 
     players = JSON.parse(JSON.stringify(previousState.players));
+    activeCourts = JSON.parse(JSON.stringify(previousState.activeCourts || activeCourts));
     assignmentCounter = previousState.assignmentCounter;
     clearSelectedPlayers();
     renderAll();
@@ -158,7 +180,8 @@ function restoreRedoState() {
     const nextState = redoHistory.pop();
 
     players = JSON.parse(JSON.stringify(nextState.players));
-    assignmentCounter = nextState.assignmentCounter;
+activeCourts = JSON.parse(JSON.stringify(nextState.activeCourts || activeCourts));
+assignmentCounter = nextState.assignmentCounter;
     clearSelectedPlayers();
     renderAll();
 }
@@ -259,7 +282,31 @@ function createAssignedPlayerButton(player) {
 
     return playerBtn;
 }
+function renderCourtActiveState() {
+    courtActiveButtons.forEach((button) => {
+        const courtNo = button.dataset.court;
+        const active = isCourtActive(courtNo);
 
+        button.textContent = active ? '활성' : '비활성';
+        button.classList.toggle('inactive', !active);
+    });
+
+    for (let courtNo = 1; courtNo <= 4; courtNo++) {
+        const currentCourtArea = document.getElementById(`currentCourt${courtNo}A`);
+        const nextCourtArea = document.getElementById(`nextCourt${courtNo}A`);
+        const currentCourtBox = currentCourtArea ? currentCourtArea.closest('.badminton-court') : null;
+        const nextCourtBox = nextCourtArea ? nextCourtArea.closest('.badminton-court') : null;
+        const active = isCourtActive(String(courtNo));
+
+        if (currentCourtBox) {
+            currentCourtBox.classList.toggle('inactive-court', !active);
+        }
+
+        if (nextCourtBox) {
+            nextCourtBox.classList.toggle('inactive-court', !active);
+        }
+    }
+}
 function renderCourts() {
     assignableAreas.forEach((area) => {
         const courtId = area.id;
@@ -280,11 +327,11 @@ function renderAll() {
     renderWaitingPlayers();
     renderCourts();
     renderRestPlayers();
-
+    renderCourtActiveState();
     if (selectedCountBox) {
         selectedCountBox.textContent = `선택된 선수 : ${selectedPlayers.length}명`;
     }
-
+    saveActiveCourts();
     saveCourtState();
 }
 
@@ -316,6 +363,12 @@ function renderRestPlayers() {
 assignableAreas.forEach((area) => {
     area.addEventListener('click', () => {
         saveUndoState();
+        const courtNo = getCourtNoFromAreaId(area.id);
+
+if (courtNo && !isCourtActive(courtNo)) {
+    alert(`${courtNo}코트는 비활성 상태입니다.`);
+    return;
+}
         if (selectedPlayers.length === 0) {
             alert('먼저 선수를 선택해주세요.');
             return;
@@ -570,6 +623,37 @@ if (clearNextGamesBtn) {
         renderAll();
     });
 }
+courtActiveButtons.forEach((button) => {
+    button.addEventListener('click', (event) => {
+        event.stopPropagation();
+        saveUndoState();
+
+        const courtNo = button.dataset.court;
+        const willBeActive = !isCourtActive(courtNo);
+
+        if (!willBeActive) {
+            const confirmInactive = confirm(`${courtNo}코트를 비활성화할까요? 해당 코트의 현재/다음 경기 선수는 대기칸으로 이동합니다.`);
+
+            if (!confirmInactive) {
+                return;
+            }
+
+            players.forEach((player) => {
+                if (player.assignedTo === `currentCourt${courtNo}A` ||
+                    player.assignedTo === `currentCourt${courtNo}B` ||
+                    player.assignedTo === `nextCourt${courtNo}A` ||
+                    player.assignedTo === `nextCourt${courtNo}B`) {
+                    player.assignedTo = null;
+                    player.assignedOrder = null;
+                }
+            });
+        }
+
+        activeCourts[courtNo] = willBeActive;
+        clearSelectedPlayers();
+        renderAll();
+    });
+});
 if (resetWorkoutBtn) {
     resetWorkoutBtn.addEventListener('click', () => {
         const confirmReset = confirm('새 운동을 시작할까요? 현재 코트 배정과 경기 수가 모두 초기화됩니다.');
@@ -588,10 +672,17 @@ if (resetWorkoutBtn) {
             }));
 
         clearSelectedPlayers();
-        assignmentCounter = 0;
-        localStorage.removeItem(COURT_STATE_KEY);
-        localStorage.removeItem('selectedPlayers');
-        location.href = 'index.html';
+assignmentCounter = 0;
+activeCourts = {
+    1: true,
+    2: true,
+    3: true,
+    4: true
+};
+localStorage.removeItem(COURT_STATE_KEY);
+localStorage.removeItem(COURT_ACTIVE_KEY);
+localStorage.removeItem('selectedPlayers');
+location.href = 'index.html';
     });
 }
 
@@ -648,6 +739,10 @@ finishButtons.forEach((button) => {
     button.addEventListener('click', () => {
         saveUndoState();
         const courtNo = button.dataset.court;
+        if (!isCourtActive(courtNo)) {
+        alert(`${courtNo}코트는 비활성 상태입니다.`);
+        return;
+}
         const replacedCurrentPlayerNames = new Set();
         const endedGameCounts = new Map();
 

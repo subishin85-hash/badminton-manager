@@ -260,7 +260,14 @@ button{
     margin:0;
     width:100vw;
     min-height:100vh;
+    height:auto;
     overflow:auto;
+
+    display:block;
+    justify-content:initial;
+    align-items:initial;
+    padding:0;
+
     background:#ffffff;
     font-family:"Apple SD Gothic Neo", sans-serif;
 }
@@ -289,7 +296,7 @@ button{
 .court-title-bar h1{
     margin:0;
     width:99%;
-    height:90%;
+    height:80%;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -740,4 +747,36 @@ button{
     font-weight:900;
 
     z-index:20;
+}
+
+.court-active-btn{
+    height:42px;
+    padding:0 14px;
+    margin-left:8px;
+    border:none;
+    border-radius:10px;
+    background:#2e7d32;
+    color:white;
+    font-size:22px;
+    font-weight:900;
+    cursor:pointer;
+    vertical-align:middle;
+}
+
+.court-active-btn.inactive{
+    background:#757575;
+}
+
+.badminton-court.inactive-court{
+    opacity:0.35;
+    filter:grayscale(70%);
+}
+
+.badminton-court.inactive-court .court-field{
+    background:#9e9e9e;
+}
+
+.badminton-court.inactive-court .finish-game-btn{
+    background:#9e9e9e;
+    cursor:not-allowed;
 }
