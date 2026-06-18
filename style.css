@@ -259,15 +259,15 @@ button{
 .court-body{
     margin:0;
     width:100vw;
-    height:100vh;
-    overflow:hidden;
+    min-height:100vh;
+    overflow:auto;
     background:#ffffff;
     font-family:"Apple SD Gothic Neo", sans-serif;
 }
 
 .court-layout{
     width:100vw;
-    height:100vh;
+    min-height:100vh;
     display:grid;
     grid-template-columns:82% 16%;
     grid-template-rows:10% 43% 43%;
