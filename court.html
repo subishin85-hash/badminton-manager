@@ -72,6 +72,7 @@
 
         <section class="game-board waiting-game-board">
             <div class="section-label waiting-game-label">게임 대기 중</div>
+            <button id="autoAssignBtn" class="auto-assign-btn" type="button">자동 배정</button>
             <button id="clearNextGamesBtn" class="clear-next-games-btn" type="button">다음 경기 초기화</button>
 
             <div class="court-list">
@@ -129,7 +130,17 @@
     </aside>
 
 </div>
-
+<div id="autoAssignModal" class="auto-assign-modal hidden">
+    <div class="auto-assign-modal-box">
+        <h2>자동 배정 선택</h2>
+        <p>배정 방식을 선택하세요.</p>
+        <div class="auto-assign-modal-actions">
+            <button id="autoAssignEmptyBtn" type="button">빈 코트만</button>
+            <button id="autoAssignAllBtn" type="button">전체 코트</button>
+            <button id="autoAssignCancelBtn" type="button">취소</button>
+        </div>
+    </div>
+</div>
 <script src="court.js"></script>
 </body>
 </html>

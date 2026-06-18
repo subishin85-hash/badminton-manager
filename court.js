@@ -11,7 +11,12 @@ const createPlaceholderBtn = document.getElementById('createPlaceholderBtn');
 const resetWorkoutBtn = document.getElementById('resetWorkoutBtn');
 const editPlayersBtn = document.getElementById('editPlayersBtn');
 const clearNextGamesBtn = document.getElementById('clearNextGamesBtn');
+const autoAssignBtn = document.getElementById('autoAssignBtn');
 const showStatsBtn = document.getElementById('showStatsBtn');
+const autoAssignModal = document.getElementById('autoAssignModal');
+const autoAssignEmptyBtn = document.getElementById('autoAssignEmptyBtn');
+const autoAssignAllBtn = document.getElementById('autoAssignAllBtn');
+const autoAssignCancelBtn = document.getElementById('autoAssignCancelBtn');
 const undoBtn = document.getElementById('undoBtn');
 const redoBtn = document.getElementById('redoBtn');
 const selectedCountBox = document.getElementById('selectedCountBox');
@@ -603,6 +608,134 @@ if (showStatsBtn) {
 }
 
 
+
+function shufflePlayers(playerList) {
+    const shuffled = [...playerList];
+
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    return shuffled;
+}
+
+function getAutoAssignWaitingPlayers() {
+    const waitingPlayerList = players.filter(player => !player.assignedTo);
+    const groupedByGames = new Map();
+
+    waitingPlayerList.forEach((player) => {
+        const gamesPlayed = player.gamesPlayed || 0;
+
+        if (!groupedByGames.has(gamesPlayed)) {
+            groupedByGames.set(gamesPlayed, []);
+        }
+
+        groupedByGames.get(gamesPlayed).push(player);
+    });
+
+    return [...groupedByGames.keys()]
+        .sort((a, b) => a - b)
+        .flatMap(gameCount => shufflePlayers(groupedByGames.get(gameCount)));
+}
+
+function isNextCourtEmpty(courtNo) {
+    return !players.some(player =>
+        player.assignedTo === `nextCourt${courtNo}A` ||
+        player.assignedTo === `nextCourt${courtNo}B`
+    );
+}
+
+function clearNextCourtsForAutoAssign() {
+    players.forEach((player) => {
+        if (player.assignedTo && player.assignedTo.startsWith('nextCourt')) {
+            player.assignedTo = null;
+            player.assignedOrder = null;
+        }
+    });
+}
+
+function getAutoAssignTargetCourts(onlyEmptyCourts) {
+    const targetCourts = [];
+
+    for (let courtNo = 1; courtNo <= 4; courtNo++) {
+        if (!isCourtActive(String(courtNo))) {
+            continue;
+        }
+
+        if (onlyEmptyCourts && !isNextCourtEmpty(courtNo)) {
+            continue;
+        }
+
+        targetCourts.push(courtNo);
+    }
+
+    return targetCourts;
+}
+
+function assignFourPlayersToNextCourt(courtNo, courtPlayers) {
+    courtPlayers.forEach((player, index) => {
+        player.assignedTo = index < 2 ? `nextCourt${courtNo}A` : `nextCourt${courtNo}B`;
+        player.assignedOrder = index < 2 ? index + 1 : index - 1;
+    });
+}
+
+function autoAssignNextGames(onlyEmptyCourts) {
+    saveUndoState();
+
+    if (!onlyEmptyCourts) {
+        clearNextCourtsForAutoAssign();
+    }
+
+    const targetCourts = getAutoAssignTargetCourts(onlyEmptyCourts);
+
+    if (targetCourts.length === 0) {
+        alert('자동 배정할 활성 코트가 없습니다.');
+        return;
+    }
+
+    const waitingPlayerList = getAutoAssignWaitingPlayers();
+    const assignableCourtCount = Math.min(targetCourts.length, Math.floor(waitingPlayerList.length / 4));
+
+    if (assignableCourtCount === 0) {
+        alert('자동 배정하려면 대기 선수가 최소 4명 필요합니다.');
+        return;
+    }
+
+    for (let i = 0; i < assignableCourtCount; i++) {
+        const courtNo = targetCourts[i];
+        const courtPlayers = waitingPlayerList.slice(i * 4, i * 4 + 4);
+        assignFourPlayersToNextCourt(courtNo, courtPlayers);
+    }
+
+    clearSelectedPlayers();
+    renderAll();
+}
+
+if (autoAssignBtn) {
+    autoAssignBtn.addEventListener('click', () => {
+        autoAssignModal.classList.remove('hidden');
+    });
+}
+if (autoAssignEmptyBtn) {
+    autoAssignEmptyBtn.addEventListener('click', () => {
+        autoAssignModal.classList.add('hidden');
+        autoAssignNextGames(true);
+    });
+}
+
+if (autoAssignAllBtn) {
+    autoAssignAllBtn.addEventListener('click', () => {
+        autoAssignModal.classList.add('hidden');
+        autoAssignNextGames(false);
+    });
+}
+
+if (autoAssignCancelBtn) {
+    autoAssignCancelBtn.addEventListener('click', () => {
+        autoAssignModal.classList.add('hidden');
+    });
+}
 if (clearNextGamesBtn) {
     clearNextGamesBtn.addEventListener('click', () => {
         saveUndoState();
