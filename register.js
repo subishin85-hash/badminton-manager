@@ -18,6 +18,7 @@ let players = [];
 const MEMBER_STORAGE_KEY = 'ganghoMemberList';
 const SELECTED_PLAYERS_KEY = 'selectedPlayers';
 const COURT_STATE_KEY = 'ganghoCourtState';
+const LONG_PRESS_DURATION = 800;
 
 function saveMemberList() {
     const members = players
@@ -85,8 +86,50 @@ function loadSelectedPlayersForEdit() {
     }
 }
 
+function removePlayerFromSelectedPlayers(name) {
+    const savedSelectedPlayers = localStorage.getItem(SELECTED_PLAYERS_KEY);
+
+    if (!savedSelectedPlayers) {
+        return;
+    }
+
+    try {
+        const selectedPlayers = JSON.parse(savedSelectedPlayers);
+        const filteredPlayers = selectedPlayers.filter(player => player.name !== name);
+        localStorage.setItem(SELECTED_PLAYERS_KEY, JSON.stringify(filteredPlayers));
+    } catch (error) {
+        console.error('참가자 명단에서 선수를 삭제하는 중 오류가 발생했습니다.', error);
+    }
+}
+
+function deleteSinglePlayer(index) {
+    const player = players[index];
+
+    if (!player) {
+        return;
+    }
+
+    const confirmMessage = player.type === 'guest'
+        ? `${player.name} 게스트를 삭제할까요?\n오늘 참가자 명단에서도 함께 삭제됩니다.`
+        : `${player.name} 선수를 삭제할까요?\n회원 명단과 오늘 참가자 명단에서 함께 삭제됩니다.`;
+
+    const confirmDelete = confirm(confirmMessage);
+
+    if (!confirmDelete) {
+        return;
+    }
+
+    players.splice(index, 1);
+    removePlayerFromSelectedPlayers(player.name);
+    saveMemberList();
+    renderPlayers();
+}
+
 function makePlayerButton(player, index) {
     const btn = document.createElement('button');
+    let longPressTimer = null;
+    let isLongPressed = false;
+
     btn.type = 'button';
     btn.textContent = player.name;
     btn.className = 'player-btn';
@@ -95,7 +138,35 @@ function makePlayerButton(player, index) {
         btn.classList.add('selected');
     }
 
+    const startLongPress = () => {
+        isLongPressed = false;
+        longPressTimer = setTimeout(() => {
+            isLongPressed = true;
+            deleteSinglePlayer(index);
+        }, LONG_PRESS_DURATION);
+    };
+
+    const cancelLongPress = () => {
+        if (longPressTimer) {
+            clearTimeout(longPressTimer);
+            longPressTimer = null;
+        }
+    };
+
+    btn.addEventListener('mousedown', startLongPress);
+    btn.addEventListener('touchstart', startLongPress, { passive: true });
+
+    btn.addEventListener('mouseup', cancelLongPress);
+    btn.addEventListener('mouseleave', cancelLongPress);
+    btn.addEventListener('touchend', cancelLongPress);
+    btn.addEventListener('touchcancel', cancelLongPress);
+
     btn.addEventListener('click', () => {
+        if (isLongPressed) {
+            isLongPressed = false;
+            return;
+        }
+
         players[index].selected = !players[index].selected;
         renderPlayers();
     });

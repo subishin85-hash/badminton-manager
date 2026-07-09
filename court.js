@@ -47,7 +47,33 @@ function getCourtNoFromAreaId(areaId) {
 function saveCourtState() {
     localStorage.setItem(COURT_STATE_KEY, JSON.stringify(players));
 }
+let firebaseSaveTimer = null;
 
+function getMatchStateForFirebase() {
+    return {
+        players: JSON.parse(JSON.stringify(players)),
+        activeCourts: JSON.parse(JSON.stringify(activeCourts)),
+        savedAt: new Date().toISOString()
+    };
+}
+
+function saveMatchStateToFirebaseSafely() {
+    if (!window.ganghoFirebase || !window.ganghoFirebase.saveMatchStateToFirebase) {
+        return;
+    }
+
+    if (firebaseSaveTimer) {
+        clearTimeout(firebaseSaveTimer);
+    }
+
+    firebaseSaveTimer = setTimeout(() => {
+        window.ganghoFirebase
+            .saveMatchStateToFirebase(getMatchStateForFirebase())
+            .catch((error) => {
+                console.error('Firebase 저장 중 오류가 발생했습니다.', error);
+            });
+    }, 300);
+}
 function loadCourtState() {
     const savedCourtState = localStorage.getItem(COURT_STATE_KEY);
 
@@ -338,6 +364,7 @@ function renderAll() {
     }
     saveActiveCourts();
     saveCourtState();
+    saveMatchStateToFirebaseSafely();
 }
 
 function renderRestPlayers() {
@@ -950,3 +977,7 @@ if (redoBtn) {
 
 loadCourtState();
 renderAll();
+
+setTimeout(() => {
+    saveMatchStateToFirebaseSafely();
+}, 1000);

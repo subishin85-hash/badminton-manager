@@ -1,0 +1,43 @@
+
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>강호클럽 경기 현황</title>
+    <link rel="stylesheet" href="style.css?v=20260619-view">
+</head>
+<body class="view-body">
+
+<div class="view-container">
+    <header class="view-header">
+        <h1>강호클럽 경기 현황</h1>
+        <div id="viewUpdatedAt" class="view-updated-at">연결 대기 중...</div>
+    </header>
+
+    <section class="view-section current-view-section">
+        <h2>현재 경기</h2>
+        <div id="viewCurrentGames" class="view-court-list"></div>
+    </section>
+
+    <section class="view-section next-view-section">
+        <h2>다음 경기</h2>
+        <div id="viewNextGames" class="view-court-list"></div>
+    </section>
+
+    <section class="view-section waiting-view-section">
+        <h2>대기 선수</h2>
+        <div id="viewWaitingPlayers" class="view-player-list"></div>
+    </section>
+
+    <section class="view-section rest-view-section">
+        <h2>휴식 선수</h2>
+        <div id="viewRestPlayers" class="view-player-list"></div>
+    </section>
+</div>
+
+<script type="module" src="firebase.js"></script>
+<script src="view.js?v=20260619-view"></script>
+</body>
+</html>
